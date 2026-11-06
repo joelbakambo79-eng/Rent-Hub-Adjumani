@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rent Hub Adjumani - Your go to rental partner</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brandOrange: '#FF6B00',
+                        brandOrangeHover: '#E05E00',
+                        brandBlack: '#121212',
+                        brandWhite: '#FFFFFF',
+                        brandGreen: '#25D366',
+                        brandGreenHover: '#1DA851',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-gray-50 text-brandBlack font-sans antialiased flex flex-col min-h-screen relative">
+
+    <!-- HEADER / NAVIGATION -->
+    <header class="sticky top-0 z-40 bg-brandBlack text-brandWhite border-b-4 border-brandOrange shadow-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            
+            <!-- Brand Logo & Name -->
+            <div class="flex items-center space-x-3">
+                <div class="bg-brandOrange text-brandWhite p-2.5 rounded-lg shadow-sm">
+                    <i class="fa-solid fa-house-circle-check text-2xl"></i>
+                </div>
+                <div>
+                    <span class="text-xl sm:text-2xl font-extrabold tracking-tight text-brandWhite block leading-none">
+                        RENT HUB <span class="text-brandOrange">ADJUMANI</span>
+                    </span>
+                    <span class="text-xs text-gray-300 font-medium block mt-1">
+                        Your go to rental partner
+                    </span>
+                </div>
+            </div>
+
+            <!-- Right Actions & Hamburger Menu Button -->
+            <div class="flex items-center space-x-3">
+                <!-- Direct WhatsApp Link Top -->
+                <a href="https://wa.me/256776728065?text=Hello%20Rent%20Hub%20Adjumani,%20I%20am%20looking%20for%20a%20property%20to%20rent." 
+                   target="_blank" 
+                   rel="noopener noreferrer"
+                   class="hidden sm:flex bg-brandGreen hover:bg-brandGreenHover text-white font-bold py-2 px-4 rounded-lg items-center gap-2 transition duration-200 shadow-md text-sm">
+                    <i class="fa-brands fa-whatsapp text-lg"></i>
+                    <span>0776728065</span>
+                </a>
+
+                <!-- Admin Action Button (Only visible if Admin Mode is active) -->
+                <button id="headerAdminAddBtn" onclick="openUploadModal()" class="hidden bg-brandOrange hover:bg-brandOrangeHover text-white font-bold py-2 px-3 sm:px-4 rounded-lg flex items-center gap-2 text-sm transition duration-200 shadow-md">
+                    <i class="fa-solid fa-plus-circle"></i>
+                    <span class="hidden sm:inline">Add Property</span>
+                </button>
+
+                <!-- ALWAYS VISIBLE THREE-LINE HAMBURGER MENU BUTTON -->
+                <button id="menuBtn" onclick="toggleSideMenu()" class="p-2.5 rounded-lg text-brandWhite hover:text-brandOrange hover:bg-gray-800 focus:outline-none transition duration-200 border border-gray-700" aria-label="Toggle Menu">
+                    <i class="fa-solid fa-bars text-2xl"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- SIDE NAVIGATION DRAWER OVERLAY -->
+    <div id="sideMenuOverlay" class="fixed inset-0 bg-black/60 z-50 hidden transition-opacity duration-300" onclick="toggleSideMenu()"></div>
+    
+    <!-- SIDE NAVIGATION DRAWER PANEL -->
+    <aside id="sideMenu" class="fixed top-0 right-0 h-full w-80 bg-brandBlack text-brandWhite z-50 transform translate-x-full transition-transform duration-300 ease-in-out shadow-2xl flex flex-col justify-between border-l-2 border-brandOrange">
+        <div class="p-6">
+            <div class="flex items-center justify-between pb-6 border-b border-gray-800">
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-house-circle-check text-brandOrange text-xl"></i>
+                    <span class="font-extrabold text-lg text-brandWhite">RENT HUB MENU</span>
+                </div>
+                <button onclick="toggleSideMenu()" class="text-gray-400 hover:text-brandOrange text-2xl p-1">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <nav class="mt-6 space-y-4">
+                <a href="#properties" onclick="toggleSideMenu()" class="flex items-center gap-3 py-3 px-4 rounded-lg text-gray-200 hover:bg-brandOrange hover:text-white transition duration-150">
+                    <i class="fa-solid fa-building text-brandOrange"></i>
+                    <span class="font-semibold">Browse Listings</span>
+                </a>
+                
+                <!-- Admin Lock / Unlock Drawer Button -->
+                <button id="adminPortalToggleBtn" onclick="toggleSideMenu(); toggleAdminAuth()" class="w-full text-left flex items-center gap-3 py-3 px-4 rounded-lg text-gray-200 hover:bg-gray-800 border border-gray-700 transition duration-150">
+                    <i id="adminLockIcon" class="fa-solid fa-lock text-brandOrange"></i>
+                    <span id="adminLockText" class="font-semibold">Page Admin Access</span>
+                </button>
+
+                <a href="https://wa.me/256776728065?text=Hello%20Rent%20Hub%20Adjumani,%20I%20need%20assistance." target="_blank" class="flex items-center gap-3 py-3 px-4 rounded-lg text-gray-200 hover:bg-brandGreen hover:text-white transition duration-150">
+                    <i class="fa-brands fa-whatsapp text-brandGreen"></i>
+                    <span class="font-semibold">Contact Support (0776728065)</span>
+                </a>
+            </nav>
+        </div>
+
+        <div class="p-6 border-t border-gray-800 bg-gray-900/50 text-center">
+            <span class="text-xs text-brandOrange font-bold block mb-1">LOCATION FOCUS</span>
+            <span class="text-sm text-gray-300 font-medium">Adjumani Town Council Only</span>
+        </div>
+    </aside>
+
+    <!-- PROPERTY SEARCH BAR SECTION (PLACED BEFORE EXCLUSIVE COVERAGE BANNER) -->
+    <section class="bg-brandBlack py-6 px-4 sm:px-6 lg:px-8 border-b border-gray-800">
+        <div class="max-w-4xl mx-auto bg-gray-900 p-4 sm:p-6 rounded-2xl border-2 border-brandOrange shadow-xl">
+            <div class="mb-3 text-center sm:text-left">
+                <span class="text-xs font-bold uppercase tracking-wider text-brandOrange">Quick Property Search</span>
+                <h3 class="text-lg sm:text-xl font-bold text-brandWhite">Find a Home or Shop in Adjumani Town Council</h3>
+            </div>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-12 gap-3">
+                <!-- Keyword Input -->
+                <div class="relative sm:col-span-6">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </div>
+                    <input type="text" id="searchInput" oninput="filterProperties()" 
+                           placeholder="Search house, room, shop, 2 bedroom..." 
+                           class="w-full pl-10 pr-4 py-3 bg-white text-brandBlack rounded-xl border-0 focus:ring-2 focus:ring-brandOrange focus:outline-none text-sm font-medium">
+                </div>
+
+                <!-- Location Select Filter -->
+                <div class="relative sm:col-span-4">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-brandOrange">
+                        <i class="fa-solid fa-location-dot"></i>
+                    </div>
+                    <select id="locationFilter" onchange="filterProperties()" 
+                            class="w-full pl-10 pr-4 py-3 bg-white text-brandBlack rounded-xl border-0 focus:ring-2 focus:ring-brandOrange focus:outline-none text-sm font-medium">
+                        <option value="ALL">All Adjumani Cells</option>
+                        <option value="Central 1">Central 1</option>
+                        <option value="Central 2">Central 2</option>
+                        <option value="Forua">Forua</option>
+                        <option value="Molukpwoda">Molukpwoda</option>
+                        <option value="Mgbere">Mgbere</option>
+                        <option value="Lajopi Cesia">Lajopi Cesia</option>
+                        <option value="Lajopi Ginnery">Lajopi Ginnery</option>
+                        <option value="Patua">Patua</option>
+                        <option value="Mocope">Mocope</option>
+                        <option value="Pavuraga">Pavuraga</option>
+                        <option value="Paridi">Paridi</option>
+                        <option value="Biyaya">Biyaya</option>
+                        <option value="Karoko">Karoko</option>
+                        <option value="Odrueyi">Odrueyi</option>
+                        <option value="Abirichaku">Abirichaku</option>
+                        <option value="Minia East">Minia East</option>
+                        <option value="Minia West">Minia West</option>
+                    </select>
+                </div>
+
+                <!-- Reset Search Button -->
+                <div class="sm:col-span-2">
+                    <button onclick="resetSearch()" 
+                            class="w-full h-full py-3 sm:py-0 bg-brandOrange hover:bg-brandOrangeHover text-white font-bold rounded-xl transition duration-200 text-sm flex items-center justify-center gap-1 shadow-md">
+                        <i class="fa-solid fa-rotate-right"></i>
+                        <span>Reset</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- HERO SECTION -->
+    <section class="bg-gradient-to-r from-brandBlack via-gray-900 to-brandBlack text-brandWhite py-12 px-4 sm:px-6 lg:px-8 border-b border-gray-800">
+        <div class="max-w-7xl mx-auto text-center">
+            <span class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-xs font-semibold bg-brandOrange/20 text-brandOrange border border-brandOrange/40 mb-4">
+                <i class="fa-solid fa-location-dot"></i> Exclusive Coverage: Adjumani Town Council
+            </span>
+            <h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold text-brandWhite tracking-tight">
+                Rent Hub Adjumani
+            </h1>
+            <p class="mt-3 text-lg sm:text-xl text-brandOrange font-semibold tracking-wide">
+                Your go to rental partner
+            </p>
+            <p class="mt-2 text-sm sm:text-base text-gray-300 max-w-2xl mx-auto">
+                Discover rental houses, commercial units, and apartments across Adjumani Town Council cells. Direct inquiries via WhatsApp on <span class="text-brandGreen font-bold">0776728065</span>.
+            </p>
+        </div>
+    </section>
+
+    <!-- MAIN CONTAINER -->
+    <main id="properties" class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        
+        <!-- Header Controls -->
+        <div class="flex flex-col md:flex-row md:items-center justify-between pb-6 mb-8 border-b border-gray-200 gap-4">
+            <div>
+                <h2 class="text-2xl font-bold text-brandBlack flex items-center gap-2">
+                    <i class="fa-solid fa-building text-brandOrange"></i>
+                    Properties in Adjumani Town Council
+                </h2>
+                <p class="text-sm text-gray-600 mt-1">
+                    Side-by-side verified rental listings. Contact directly via WhatsApp on 0776728065.
+                </p>
+            </div>
+            
+            <!-- Admin Control Bar (Only Visible to Admin) -->
+            <div id="adminControlsBar" class="hidden flex items-center gap-3">
+                <span class="bg-emerald-100 text-emerald-800 text-xs font-extrabold px-3 py-1.5 rounded-full flex items-center gap-1 border border-emerald-300">
+                    <i class="fa-solid fa-user-shield"></i> Page Admin Mode
+                </span>
+                <button onclick="openUploadModal()" class="bg-brandOrange hover:bg-brandOrangeHover text-white font-bold py-2.5 px-4 rounded-lg flex items-center gap-2 text-sm shadow-md transition">
+                    <i class="fa-solid fa-plus-circle"></i>
+                    <span>Add New Property</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- 2-COLUMN SIDE-BY-SIDE PROPERTY GRID -->
+        <div id="propertyGrid" class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <!-- Dynamic JavaScript renders properties here -->
+        </div>
+
+    </main>
+
+    <!-- ADMIN LOGIN PIN MODAL -->
+    <div id="adminAuthModal" class="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 relative shadow-2xl border-t-4 border-brandOrange">
+            <button onclick="closeAdminAuthModal()" class="absolute top-4 right-4 text-gray-400 hover:text-brandOrange text-2xl">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div class="text-center mb-6">
+                <div class="w-12 h-12 bg-brandOrange/10 rounded-full flex items-center justify-center mx-auto mb-3 text-brandOrange">
+                    <i class="fa-solid fa-lock text-xl"></i>
+                </div>
+                <h3 class="text-xl font-bold text-brandBlack">Page Admin Login</h3>
+                <p class="text-xs text-gray-500 mt-1">Enter your passcode to manage properties</p>
+            </div>
+            <form onsubmit="handleAdminLogin(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-1">Admin Security PIN</label>
+                    <input type="password" id="adminPinInput" required placeholder="Enter passcode (Default: 1234)" 
+                           class="w-full text-center tracking-widest text-lg font-bold px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-brandOrange focus:outline-none">
+                </div>
+                <p id="adminPinError" class="text-xs text-red-600 font-bold hidden text-center">Incorrect PIN. Try default: 1234</p>
+                <button type="submit" class="w-full py-3 bg-brandOrange text-white font-bold rounded-lg hover:bg-brandOrangeHover transition shadow-md">
+                    Unlock Admin Portal
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ADMIN PROPERTY UPLOAD BACKEND MODAL -->
+    <div id="uploadModal" class="fixed inset-0 bg-black/75 z-50 flex items-center justify-center p-4 hidden overflow-y-auto">
+        <div class="bg-white rounded-2xl max-w-lg w-full p-6 sm:p-8 relative shadow-2xl border-t-4 border-brandOrange my-8">
+            <button onclick="closeUploadModal()" class="absolute top-4 right-4 text-gray-400 hover:text-brandOrange text-2xl">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <div class="flex items-center gap-3 mb-6">
+                <div class="bg-brandOrange/10 p-3 rounded-lg text-brandOrange">
+                    <i class="fa-solid fa-user-shield text-2xl"></i>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold text-brandBlack">Page Admin — Upload Property</h3>
+                    <p class="text-xs text-gray-500">Post a new listing directly to Adjumani Town Council grid</p>
+                </div>
+            </div>
+
+            <form id="uploadPropertyForm" onsubmit="handlePropertySubmit(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-1">Property Title *</label>
+                    <input type="text" id="propTitle" required placeholder="e.g. Modern 2 Bedroom Self-Contained House" 
+                           class="w-full px-3.5 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-brandOrange focus:outline-none text-sm">
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-1">Location Cell *</label>
+                        <select id="propLocation" required class="w-full px-3.5 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-brandOrange focus:outline-none text-sm">
+                            <option value="Central 1">Central 1</option>
+                            <option value="Central 2">Central 2</option>
+                            <option value="Forua">Forua</option>
+                            <option value="Molukpwoda">Molukpwoda</option>
+                            <option value="Mgbere">Mgbere</option>
+                            <option value="Lajopi Cesia">Lajopi Cesia</option>
+                            <option value="Lajopi Ginnery">Lajopi Ginnery</option>
+                            <option value="Patua">Patua</option>
+                            <option value="Mocope">Mocope</option>
+                            <option value="Pavuraga">Pavuraga</option>
+                            <option value="Paridi">Paridi</option>
+                            <option value="Biyaya">Biyaya</option>
+                            <option value="Karoko">Karoko</option>
+                            <option value="Odrueyi">Odrueyi</option>
+                            <option value="Abirichaku">Abirichaku</option>
+                            <option value="Minia East">Minia East</option>
+                            <option value="Minia West">Minia West</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-1">Monthly Rent (UGX) *</label>
+                        <input type="number" id="propPrice" required placeholder="e.g. 450000" 
+                               class="w-full px-3.5 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-brandOrange focus:outline-none text-sm">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-1">Category *</label>
+                        <select id="propCategory" required class="w-full px-3.5 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-brandOrange focus:outline-none text-sm">
+                            <option value="Residential">Residential</option>
+                            <option value="Commercial">Commercial</option>
+                            <option value="Land / Plot">Land / Plot</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-1">Status Badge *</label>
+                        <input 
